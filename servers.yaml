@@ -1,0 +1,24 @@
+---
+- name: k8s-master
+  hostname: k8s-master.local
+  box_name: ansible/tower
+  ip: 192.168.56.2
+  gui: false
+  ram: 1024
+  cpus: 2
+
+- name: k8s-node1
+  hostname: k8s-node1.local
+  box_name: debian/stretch64
+  ip: 192.168.56.3
+  gui: false
+  ram: 1024
+  cpus: 2
+
+- name: k8s-node2
+  hostname: k8s-node2.local
+  box_name: debian/stretch64
+  ip: 192.168.56.4
+  gui: false
+  ram: 1024
+  cpus: 2
