@@ -1,12 +1,14 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+ansible role to setting up a Kubernetes cluster that will consist of one master and two worker nodes. All the nodes will run Ubuntu Xenial 64-bit OS and Ansible playbooks will be used for provisioning
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Vagrant should be installed on your machine.
+- Oracle VirtualBox can be used as a Vagrant provider or make use of similar providers as      described in Vagrant's official
+- Ansible should be installed in your machine.
 
 Role Variables
 --------------
