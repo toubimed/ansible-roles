@@ -1,2 +1,4 @@
 ---
-# defaults file for ansible-Kubernetes-role
+  k8s_key_path: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  k8s_download_path: deb https://apt.kubernetes.io/ kubernetes-xenial main
+  calico_network_path: https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml

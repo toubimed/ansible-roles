@@ -13,12 +13,12 @@
 
   - name: Add an apt signing key for Kubernetes.
     apt_key:
-      url: url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      url: {{ k8s_key_path }}
       state: present
 
   - name: Add Adding apt repository for Kubernetes.
     apt_repository:
-      repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+      repo: {{ k8s_download_path }}
       state: present
       filename: kubernetes.list
 
@@ -33,6 +33,15 @@
         - kubeadm
         - kubectl
 
+  - name: Download Kubectl binaries.
+    get_url:
+      url: {{ kubectl_download_path }}
+      dest: /usr/local/bin
+      owner: root
+      group: root
+      mode: '0755'
+      force: yes
+
   - name: Configure node ip
     lineinfile:
       path: /etc/default/kubelet
@@ -45,10 +54,10 @@
       state: restarted
 
   - name: Initialize the Kubernetes cluster using kubeadm.
-    command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --pod-network-cidr=192.168.0.0/16
+    command: kubeadm init --apiserver-advertise-address="{{ apiserver_address }}" --apiserver-cert-extra-sans="{{ apiserver_address }}"  --node-name "{{ master_name }}" --pod-network-cidr="{{ network_cidr }}"
 
  - name: Install calico pod network.
-   command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
+   command: kubectl create -f "{{ calico_network_path }}"
 
  - name: Generate join command.
    command: kubeadm token create --print-join-command
