@@ -1,0 +1,4 @@
+---
+  epel_repo_path: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+  epel_key_path: https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+  webtatic_repo_path: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm

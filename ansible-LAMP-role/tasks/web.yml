@@ -1,0 +1,40 @@
+---
+  - name: Install the Apache web server.
+    yum: name=httpd state=present update_cache=yes
+
+  - name: Ensure the Apache is started and enabled et boot.
+    service: name=htppd state=started enabled=yes
+
+  - name: Add EPEL repository.
+    yum_repository:
+      name: epel
+      description: EPEL YUM repo
+      baseurl: "{{ epel_repo_path }}"
+
+  - name: Add public key of EPEL.
+    yum_key:
+      key: "{{ epel_key_path }}"
+      state: present
+
+  - name: Add webtatic repository.
+    yum:
+      name: "{{ webtatic_repo_path }}"
+      state: present
+
+  - name: Install PHP 7 and required packages.
+    yum:
+      name: {{ packages }}
+      state: present
+    vars:
+      packages:
+        - mod_php71w
+        - php71w-cli
+        - php71w-common
+        - php71w-gd
+        - php71w-mbstring
+        - php71w-mcrypt
+        - php71w-mysqlnd
+        - php71w-xml
+        - unzip
+        - vim
+        - mariadb
