@@ -1,2 +1,4 @@
 ---
-# vars file for ansible-LAMP-role/
+  app_database_name: forum
+  app_database_user: forum
+  app_database_pass: forum

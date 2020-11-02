@@ -18,7 +18,7 @@
 
   - name: Upload the .my.cnf file to save the credentials
     copy:
-      src: my.cnf
+      src: files/my.cnf
       dest: /root/.my.cnf
       owner: root
       mode: 0600
@@ -31,13 +31,13 @@
 
   - name: Create application database
     mysql_db:
-      name: ci_database
+      name: "{{ app_database_name }}"
       state: present
 
   - name: Create an application user
     mysql_user:
-      name: ci_user
-      password: cipassword
+      name: "{{ app_database_user }}"
+      password: "{{ app_database_pass }}"
       host: '%'
-      priv: ci_database.*:ALL
+      priv: "{{ app_database_name }}".*:ALL
       state: present

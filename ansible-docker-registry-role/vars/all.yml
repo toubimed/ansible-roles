@@ -1,0 +1,9 @@
+docker_GPG_key: "https://download.docker.com/linux/ubuntu/gpg"
+docker_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ release }} stable"
+docker_compose_version: '1.25.0'
+docker_compose_url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64"
+docker_registry_path: "/var/docker-registry"
+release: "{{ ansible_distribution_release }}"
+docker_compose_path: /usr/local/bin/docker-compose
+docker_machine_version: 'v0.13.0'
+docker_machine_url: "https://github.com/docker/machine/releases/download/{{ docker_machine_version }}/docker-machine-Linux-x86_64"

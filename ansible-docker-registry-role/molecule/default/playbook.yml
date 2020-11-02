@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  vars_files:
+    - ../../vars/all.yml
+  roles:
+    - role: docker_registry
+  handlers:
+    - include: ../../handlers/handlers.yml

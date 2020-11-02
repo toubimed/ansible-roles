@@ -1,0 +1,77 @@
+---
+  - name: Install Requirements Dependencies.
+    apt:
+      name: ['software-properties-common', 'ca-certificates', 'curl', 'apt-transport-https']
+      state: present
+      update_cache: yes
+
+  - name: Install pip for Python.
+    apt:
+       name: python-pip
+       state: present
+
+  - name: Install Docker SDK for Python.
+    pip:
+      name: ['docker-compose']
+      state: present
+
+  - name: Add Docker GPG apt Key.
+    apt_key:
+      url: "{{ docker_GPG_key }}"
+      state: present
+
+  - name: Add Docker Repository.
+    apt_repository:
+      repo: "{{ docker_repo }}"
+      state: present
+
+  - name: Install Docker-ce.
+    apt:
+       name: docker-ce
+       state: present
+       update_cache: yes
+    notify:
+      - Start Docker
+
+  - name: Install Docker compose.
+    get_url:
+       url: "{{ docker_compose_url }}"
+       dest: "/tmp/docker-compose"
+       remote_src: no
+       mode: '0755'
+
+  - name: Move Docker compose into Global Path.
+    copy:
+      src: "/tmp/docker-compose"
+      dest: "/usr/local/bin"
+      mode: '0755'
+      remote_src: yes
+
+  - name: Install docker machine
+    get_url:
+      url: "{{ docker_machine_url }}"
+      dest: "/tmp/docker-machine"
+      remote_src: no
+      mode: 0755
+
+  - name: Move Docker machine into Global Path
+    copy:
+       src: "/tmp/docker-machine"
+       dest: "/usr/local/bin"
+       remote_src: yes
+       mode: 0755
+
+  - name: Create directory Docker registry.
+    file:
+       path: "{{ docker_registry_path }}"
+       state: directory
+
+  - name: Copy directory docker_compose registry.
+    copy:
+       src: "../../files/docker-compose.yml"
+       dest: "{{ docker_registry_path }}"
+
+  - name: Launch Docker registry server.
+    docker_compose:
+       project_src: "{{ docker_registry_path }}"
+       state: present

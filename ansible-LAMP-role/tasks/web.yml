@@ -38,3 +38,15 @@
         - unzip
         - vim
         - mariadb
+        - php-cli
+        - php-json
+        - php-zip
+
+    - name: download the Composer installer script.
+      get_url:
+        url: "{{ composer_script_path }}"
+        dest: /tmp
+        mode: 0755
+
+    - name: Install composer
+      command: php composer-setup.php --install-dir=/usr/local/bin --filename=composer
