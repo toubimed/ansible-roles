@@ -1,0 +1,3 @@
+this plugins is required in jenkins 
+- jenkins job DSL plugin
+- envist plugin

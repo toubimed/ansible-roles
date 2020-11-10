@@ -1,0 +1,14 @@
+- name: Ensure that openssh server is installed.
+  apt: name=openssh-server state=latest cache_valid_time=3600
+
+- name: Ensure that openssh server is started and enabled at boot.
+  service: name=ssh state=started enabled=yes
+
+- name: Install ntp.
+  apt: name=ntp state=present
+
+- name: Start and enable ntp at boot.
+  service: name=ntp state=started enabled=yes
+
+- name: Create CA certificate directory.
+  file: path="{{ ca_user_key }}" state=directory owner=root group=root mode='0700'

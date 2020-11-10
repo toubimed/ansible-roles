@@ -1,0 +1,5 @@
+---
+  ansible_temp_directory: /var/ansible_ssh
+  ca_user_key: /etc/ssh/ca_user_key
+  authorized_principals_dir: /etc/ssh/auth_principals
+  revoke_keys_file: /etc/ssh/revoked_keys

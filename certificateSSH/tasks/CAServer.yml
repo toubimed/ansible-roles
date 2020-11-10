@@ -1,0 +1,10 @@
+- name: Create CA certificate.
+  command: ssh-keygen -t rsa -N '' -C ca -b 4096 -f "{{ ca_user_key }}/ca"
+  args:
+    creates: "{{ ca_user_key }}/ca"
+
+- name: Download CA key pairs.
+  fetch: src="{{ ca_user_key }}/{{ item }}" dest="{{ ansible_temp_directory }}/" flat=yes
+  loop:
+    - ca
+    - ca.pub

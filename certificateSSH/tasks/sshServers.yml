@@ -1,0 +1,46 @@
+- name: Copy the public CA key to Servers.
+  copy:
+    src: "{{ ansible_temp_directory }}/ca.pub"
+    dest: "{{ ca_user_key }}/ca.pub"
+    owner: root
+    group: root
+  notify: "restart sshd"
+
+- name: Add folder for authorized principals
+  file: path="{{ authorized_principals_dir }}" owner=root group=root state=directory
+
+- name: Create principals files for users
+  file: path="{{ item }}" state=touch owner=root group=root
+  with_items:
+    - "{{ authorized_principals_dir }}/root"
+  notify: "restart sshd"
+
+- name: Create CA revoke ssh keys.
+  file: path="{{ revoke_keys_file }}" state=touch owner=root group=root mode='0600'
+
+- name: Add access principals
+  lineinfile: path="{{ item.path }}" line="{{ item.line }}"
+  with_items:
+    - path: "{{ authorized_principals_dir }}/root"
+      line: "root-everywheres"
+  notify: "restart sshd"
+
+- name: Configure sshd to trust the CA public key.
+  lineinfile: dest=/etc/ssh/sshd_config line='TrustedUserCAKeys {{ ca_user_key }}/ca.pub'
+  notify: "restart sshd"
+
+- name: Allow principals in sshd configuration.
+  lineinfile: dest=/etc/ssh/sshd_config line='AuthorizedPrincipalsFile {{ authorized_principals_dir }}/%u'
+  notify: "restart sshd"
+
+- name: Add revoked keys in sshd configuration.
+  lineinfile: dest=/etc/ssh/sshd_config line='RevokedKeys {{ revoke_keys_file }}'
+  notify: "restart sshd"
+
+- name: Ensure the authorized_keys file exist.
+  file: dest=/root/.ssh/authorized_keys state=touch
+
+- name: Generate the authorized_keys file for principal root-everywheres.
+  shell: echo "cert-authority,principals=root $(cat {{ ca_user_key }}/ca.pub)" >> /root/.ssh/authorized_keys
+  register: authorized_keys
+  changed_when: "'changed' in authorized_keys.stdout"

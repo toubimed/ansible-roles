@@ -1,0 +1,33 @@
+- name: Perform common tasks in servers.
+  hosts: all
+  remote_user: root
+  vars_files:
+    - ../defaults/main.yml
+  tasks:
+    - include: common.yml
+
+- name: Create a temporary directory for storing SSH public keys and certificates.
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - ../defaults/main.yml
+  tasks:
+    - include: automationserver.yml
+
+- name: Create the CA keys.
+  hosts: ca
+  remote_user: root
+  vars_files:
+    - ../defaults/main.yml
+  tasks:
+    - include: CAServer.yml
+
+- name: Sign the clients public key with the CA.
+  hosts: dev-server
+  remote_user: root
+  vars_files:
+    - ../defaults/main.yml
+  handlers:
+    - include: ../handlers/main.yml
+  tasks:
+    - include: sshServers.yml
